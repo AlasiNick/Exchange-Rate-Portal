@@ -135,6 +135,10 @@ body {
   flex-direction: column;
 }
 
+h1 {
+  @apply text-3xl font-bold mb-8 mt-5 text-center;
+}
+
 app-root {
   display: flex;
   flex: 1;

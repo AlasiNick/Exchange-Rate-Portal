@@ -12,8 +12,12 @@ import {
   LoaderCircle,
   Ellipsis,
   LucideAngularModule,
+  Calendar,
+  ChevronsUpDown,
+  Check,
   LucideIconData,
   LayoutDashboard,
+  Bell,
   // Add more icons as needed
 } from 'lucide-angular';
 
@@ -24,6 +28,9 @@ export const ZARD_ICONS = {
   search: Search,
   menu: Menu,
   x: X,
+  calendar: Calendar,
+  check: Check,
+  bell: Bell,
   'chevron-down': ChevronDown,
   'chevron-up': ChevronUp,
   'chevron-left': ChevronLeft,
@@ -31,6 +38,7 @@ export const ZARD_ICONS = {
   'loader-circle': LoaderCircle,
   ellipsis: Ellipsis,
   'layout-dashboard': LayoutDashboard,
+  'chevrons-up-down': ChevronsUpDown,
   // Add more mappings as you need them
 } as const;
 

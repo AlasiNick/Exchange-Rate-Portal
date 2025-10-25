@@ -1,0 +1,25 @@
+<h1> Calculator for currency rates </h1>
+<div style="max-width: 60%" class="align-middle flex flex-col gap-6 p-6 border rounded-md mx-auto">
+    <input class="w-[300px] flex text-center mx-auto" z-input placeholder="Currency Amount" />
+    <z-combobox
+      [options]="currenciesForList"
+      class="w-[300px] flex text-center mx-auto"
+      [placeholder]="'Select currency...'"
+      [searchPlaceholder]="'Search currency...'"
+      [emptyText]="'No currency found.'"
+      (zOnSelect)="onSelect($event)"
+    />
+
+    <z-combobox
+      [options]="currenciesForList"
+      class="w-[300px] flex text-center mx-auto"
+      [placeholder]="'Select currency...'"
+      [searchPlaceholder]="'Search currency...'"
+      [emptyText]="'No currency found.'"
+      (zOnSelect)="onSelect($event)"
+    />
+
+    <z-date-picker class="flex text-center mx-auto" [value]="selectedDate()" placeholder="Pick a date"
+     (dateChange)="onDateChange($event)" />
+
+</div>
