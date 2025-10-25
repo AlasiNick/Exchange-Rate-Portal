@@ -16,3 +16,5 @@ Backend: any. Preferred Java/Kotlin.
 Frontend: any. Preferred Angular.
 Database: any open-source lightweight database like H2 for data storage.
 
+## For more information check Readme in each directory
+

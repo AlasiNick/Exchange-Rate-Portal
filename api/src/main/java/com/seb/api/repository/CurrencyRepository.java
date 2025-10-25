@@ -10,6 +10,4 @@ import java.util.Optional;
 public interface CurrencyRepository extends JpaRepository<Currency, String> {
 
     Optional<Currency> findByCode(String code);
-
-    boolean existsByCode(String code);
 }

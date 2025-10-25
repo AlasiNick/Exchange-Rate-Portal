@@ -18,6 +18,8 @@ public class DataInitializer implements ApplicationRunner {
     private final CurrencyService currencyService;
     private final FxRateService fxRateService;
 
+    private static final int DAYS_TO_INITIALLY_LOAD_RATES_FOR = 90;
+
     @Override
     public void run(ApplicationArguments args){
         try {
@@ -28,7 +30,7 @@ public class DataInitializer implements ApplicationRunner {
 
             if (fxRateService != null) {
                 log.info("Backfilling exchange rates for last 90 days...");
-                fxRateService.backfillRates(90);
+                fxRateService.backfillRates(DAYS_TO_INITIALLY_LOAD_RATES_FOR);
             }
         } catch (Exception e) {
             log.error("Failed to initialize data", e);

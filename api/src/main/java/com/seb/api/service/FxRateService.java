@@ -1,7 +1,7 @@
 package com.seb.api.service;
 
-import com.seb.api.controller.dto.FxRate.RateDto;
-import com.seb.api.controller.dto.FxRateForCurrency.FxRates;
+import com.seb.api.controller.dto.fxRate.RateDto;
+import com.seb.api.controller.dto.fxRateForCurrency.FxRates;
 import com.seb.api.repository.FxRateRepository;
 import com.seb.api.repository.entity.Rate;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +25,14 @@ public class FxRateService {
     @Transactional(readOnly = true)
     public List<RateDto> getRatesForDate(LocalDate date) {
         List<Rate> rates = fxRateRepository.findAllByRateDate(date);
+        return rates.stream()
+                .map(rate -> new RateDto(rate.getCurrencyCode(), rate.getRateToEur(), rate.getRateDate()))
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<RateDto> getHistoricalRates(String currencyCode) {
+        List<Rate> rates = fxRateRepository.findAllByCurrencyCodeOrderByRateDateAsc(currencyCode);
         return rates.stream()
                 .map(rate -> new RateDto(rate.getCurrencyCode(), rate.getRateToEur(), rate.getRateDate()))
                 .toList();

@@ -1,9 +1,9 @@
 package com.seb.api.service;
 
-import com.seb.api.controller.dto.Currency.CurrencyDto;
-import com.seb.api.controller.dto.Currency.CurrencyTable;
-import com.seb.api.controller.dto.FxRateForCurrency.CcyAmt;
-import com.seb.api.controller.dto.FxRateForCurrency.FxRates;
+import com.seb.api.controller.dto.currency.CurrencyDto;
+import com.seb.api.controller.dto.currency.CurrencyTable;
+import com.seb.api.controller.dto.fxRateForCurrency.CcyAmt;
+import com.seb.api.controller.dto.fxRateForCurrency.FxRates;
 import com.seb.api.repository.CurrencyRepository;
 import com.seb.api.repository.entity.Currency;
 import lombok.extern.slf4j.Slf4j;

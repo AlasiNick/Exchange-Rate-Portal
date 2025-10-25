@@ -1,0 +1,11 @@
+:host {
+  display: flex;
+  flex: 1;
+  min-height: 100vh;
+  width: 100%;
+}
+
+app-page-layout {
+  flex: 1;
+  min-height: 0;
+}
