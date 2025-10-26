@@ -27,14 +27,14 @@ public class FxRateController {
     @GetMapping("/convert")
     public ConversionResultDto convertCurrency(
             @RequestParam BigDecimal amount,
-            @RequestParam String from,
-            @RequestParam String to,
+            @RequestParam String currencyFrom,
+            @RequestParam String currencyTo,
             @RequestParam(required = false) LocalDate date
     ) {
         if (date == null) {
-            return currencyConversionService.convertWithLatestRate(amount, from, to);
+            return currencyConversionService.convertWithLatestRate(amount, currencyFrom, currencyTo);
         } else {
-            return currencyConversionService.convertWithHistoricalRate(amount, from, to, date);
+            return currencyConversionService.convertWithHistoricalRate(amount, currencyFrom, currencyTo, date);
         }
     }
 

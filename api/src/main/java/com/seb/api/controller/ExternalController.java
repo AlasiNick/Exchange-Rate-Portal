@@ -20,18 +20,19 @@ public class ExternalController {
     }
 
     @GetMapping("/current-rates")
-    public String getCurrentRatesForCurrency(@RequestParam String tp) {
-        return externalApiService.getCurrentRatesRaw(tp);
+    public String getCurrentRatesForCurrency(@RequestParam String type) {
+        return externalApiService.getCurrentRatesRaw(type);
     }
 
     @GetMapping("/rates")
-    public String getRatesForCurrency(@RequestParam String tp, String dt) {
-        return externalApiService.getRatesForCurrency(tp, dt);
+    public String getRatesForCurrency(@RequestParam String type, String date) {
+        return externalApiService.getRatesForCurrency(type, date);
     }
 
     @GetMapping("/historical-rates")
-    public String getHistoricalRatesForCurrency(@RequestParam String tp, String ccy, String dtFrom, String dtTo) {
-        return externalApiService.getHistoricalRatesForCurrency(tp, ccy, dtFrom, dtTo);
+    public String getHistoricalRatesForCurrency(@RequestParam String type, String currency,
+                                                String dateFrom, String dateTo) {
+        return externalApiService.getHistoricalRatesForCurrency(type, currency, dateFrom, dateTo);
     }
 
 }

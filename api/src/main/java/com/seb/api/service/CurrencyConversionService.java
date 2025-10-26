@@ -21,29 +21,29 @@ public class CurrencyConversionService {
     private final FxRateRepository fxRateRepository;
 
     @Transactional(readOnly = true)
-    public ConversionResultDto convertWithLatestRate(BigDecimal amount, String from, String to) {
-        BigDecimal fromRate = currencyRepository.findByCode(from)
+    public ConversionResultDto convertWithLatestRate(BigDecimal amount, String currencyFrom, String currencyTo) {
+        BigDecimal fromRate = currencyRepository.findByCode(currencyFrom)
                 .map(Currency::getRateToEur)
-                .orElseThrow(() -> new IllegalArgumentException("Missing latest rate for: " + from));
+                .orElseThrow(() -> new IllegalArgumentException("Missing latest rate for: " + currencyFrom));
 
-        BigDecimal toRate = currencyRepository.findByCode(to)
+        BigDecimal toRate = currencyRepository.findByCode(currencyTo)
                 .map(Currency::getRateToEur)
-                .orElseThrow(() -> new IllegalArgumentException("Missing latest rate for: " + to));
+                .orElseThrow(() -> new IllegalArgumentException("Missing latest rate for: " + currencyTo));
 
-        return performConversion(amount, from, to, fromRate, toRate, LocalDate.now());
+        return performConversion(amount, currencyFrom, currencyTo, fromRate, toRate, LocalDate.now());
     }
 
     @Transactional(readOnly = true)
-    public ConversionResultDto convertWithHistoricalRate(BigDecimal amount, String from, String to, LocalDate date) {
-        BigDecimal fromRate = fxRateRepository.findByCurrencyCodeAndRateDate(from, date)
+    public ConversionResultDto convertWithHistoricalRate(BigDecimal amount, String currencyFrom, String currencyTo, LocalDate date) {
+        BigDecimal fromRate = fxRateRepository.findByCurrencyCodeAndRateDate(currencyFrom, date)
                 .map(Rate::getRateToEur)
-                .orElseThrow(() -> new IllegalArgumentException("Missing historical rate for: " + from + " on " + date));
+                .orElseThrow(() -> new IllegalArgumentException("Missing historical rate for: " + currencyFrom + " on " + date));
 
-        BigDecimal toRate = fxRateRepository.findByCurrencyCodeAndRateDate(to, date)
+        BigDecimal toRate = fxRateRepository.findByCurrencyCodeAndRateDate(currencyTo, date)
                 .map(Rate::getRateToEur)
-                .orElseThrow(() -> new IllegalArgumentException("Missing historical rate for: " + to + " on " + date));
+                .orElseThrow(() -> new IllegalArgumentException("Missing historical rate for: " + currencyTo + " on " + date));
 
-        return performConversion(amount, from, to, fromRate, toRate, date);
+        return performConversion(amount, currencyFrom, currencyTo, fromRate, toRate, date);
     }
 
     private ConversionResultDto performConversion(BigDecimal amount, String from, String to,

@@ -5,6 +5,8 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.deser.FromXmlParser;
 import com.seb.api.controller.dto.currency.CurrencyTable;
 import com.seb.api.controller.dto.fxRateForCurrency.FxRates;
+import com.seb.api.service.config.UrlBuilder;
+import com.seb.api.utility.LbLtEndpoints;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,39 +18,40 @@ import java.time.LocalDate;
 @Slf4j
 public class ExternalApiService {
 
-    @Autowired
-    private RestTemplate restTemplate;
-
+    private final RestTemplate restTemplate;
     private final XmlMapper xmlMapper;
 
-    public ExternalApiService() {
+    public ExternalApiService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
         this.xmlMapper = new XmlMapper();
         this.xmlMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         this.xmlMapper.configure(FromXmlParser.Feature.EMPTY_ELEMENT_AS_NULL, true);
     }
 
     public String getCurrencyListRaw() {
-        return fetchXml("https://www.lb.lt/webservices/FxRates/FxRates.asmx/getCurrencyList");
+        return fetchXml(LbLtEndpoints.GET_CURRENCIES_LIST);
     }
 
-    public String getCurrentRatesRaw(String tp) {
-        return fetchXml("https://www.lb.lt/webservices/FxRates/FxRates.asmx/getCurrentFxRates?tp=" + tp);
+    public String getCurrentRatesRaw(String type) {
+        return fetchXml(UrlBuilder.from(LbLtEndpoints.GET_CURRENT_FX_RATES)
+                .param("tp", type)
+                .build());
     }
 
     public String getRatesForCurrency(String type, String date) {
-        String url = String.format(
-                "https://www.lb.lt/webservices/FxRates/FxRates.asmx/getFxRates?tp=%s&dt=%s",
-                type, date
-        );
-        return fetchXml(url);
+        return fetchXml(UrlBuilder.from(LbLtEndpoints.GET_FX_RATES)
+                .param("tp", type)
+                .param("dt", date)
+                .build());
     }
 
     public String getHistoricalRatesForCurrency(String type, String currency, String dateFrom, String dateTo) {
-        String url = String.format(
-                "https://www.lb.lt/webservices/FxRates/FxRates.asmx/getFxRatesForCurrency?tp=%s&ccy=%s&dtFrom=%s&dtTo=%s",
-                type, currency, dateFrom, dateTo
-        );
-        return fetchXml(url);
+        return fetchXml(UrlBuilder.from(LbLtEndpoints.GET_HISTORICAL_RATES)
+                .param("tp", type)
+                .param("ccy", currency)
+                .param("dtFrom", dateFrom)
+                .param("dtTo", dateTo)
+                .build());
     }
 
     public CurrencyTable fetchCurrencyTable() {
