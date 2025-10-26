@@ -1,25 +1,67 @@
-<h1> Calculator for currency rates </h1>
-<div style="max-width: 60%" class="align-middle flex flex-col gap-6 p-6 border rounded-md mx-auto">
-    <input class="w-[300px] flex text-center mx-auto" z-input placeholder="Currency Amount" />
-    <z-combobox
-      [options]="currenciesForList"
-      class="w-[300px] flex text-center mx-auto"
-      [placeholder]="'Select currency...'"
-      [searchPlaceholder]="'Search currency...'"
-      [emptyText]="'No currency found.'"
-      (zOnSelect)="onSelect($event)"
+<h1>Currency Rate Calculator</h1>
+
+@if (showError()) {
+  <div class="max-w-xl mx-auto mb-4">
+    <z-alert
+      [zTitle]="'Error'"
+      [zDescription]="'Please fill in all fields correctly.'"
+      zType="error"
+      zAppearance="outline"
     />
+  </div>
+}
 
-    <z-combobox
-      [options]="currenciesForList"
-      class="w-[300px] flex text-center mx-auto"
-      [placeholder]="'Select currency...'"
-      [searchPlaceholder]="'Search currency...'"
-      [emptyText]="'No currency found.'"
-      (zOnSelect)="onSelect($event)"
-    />
+<div class="max-w-xl mx-auto p-6 border rounded-md flex flex-col gap-6">
+  <input
+    z-input
+    class="w-[250px] mx-auto text-center"
+    placeholder="Currency Amount"
+    [value]="currencyAmount"
+    (input)="onAmountInput($event)"
+    type="number"
+    min="0"
+  />
 
-    <z-date-picker class="flex text-center mx-auto" [value]="selectedDate()" placeholder="Pick a date"
-     (dateChange)="onDateChange($event)" />
+  <z-combobox
+    [options]="currenciesForList"
+    class="w-[250px] mx-auto"
+    [placeholder]="'Select currency to convert from'"
+    [searchPlaceholder]="'Search currency...'"
+    [emptyText]="'No currency found.'"
+    (zOnSelect)="onSelectFrom($event)"
+  />
 
+  <z-combobox
+    [options]="currenciesForList"
+    class="w-[250px] mx-auto"
+    [placeholder]="'Select currency to convert to'"
+    [searchPlaceholder]="'Search currency...'"
+    [emptyText]="'No currency found.'"
+    (zOnSelect)="onSelectTo($event)"
+  />
+
+  <z-date-picker
+    class="mx-auto"
+    [value]="selectedDate()"
+    placeholder="Pick a date"
+    (dateChange)="onDateChange($event)"
+    [maxDate]="maxDate"
+    [minDate]="minDate"
+  />
+
+  <button z-button zType="outline" class="w-[250px] mx-auto" (click)="onCalculate()">Convert</button>
+
+  @if (loaderIsActive()) {
+    <z-loader class="mx-auto" />
+  }
+
+  @if (shouldShowResult()) {
+    <div class="text-center mt-6 border-t pt-4">
+      <h2 class="text-lg font-semibold mb-2">Conversion Result</h2>
+      <p class="text-xl">
+        {{ currencyAmount }} {{ currencyFrom }} = {{ calculationResult?.convertedAmount }} {{ currencyTo }}
+      </p>
+      <p class="text-sm text-gray-500">Rate used: {{ calculationResult?.rateUsed }}</p>
+    </div>
+  }
 </div>

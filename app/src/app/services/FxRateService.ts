@@ -1,9 +1,10 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/env.dev';
 
 @Injectable({ providedIn: 'root' })
 export class FxRateService {
-  private baseUrl = 'http://localhost:8080/rates';
+  private baseUrl = `${environment.apiUrl}/rates`;
 
   constructor(private http: HttpClient) {}
 

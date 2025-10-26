@@ -41,7 +41,6 @@ public class CurrencyService {
 
             Map<String, BigDecimal> ratesByCode = fxRates.getRates().stream()
                     .flatMap(rate -> rate.getCcyAmt().stream())
-                    .filter(ccyAmt -> !"EUR".equalsIgnoreCase(ccyAmt.getCcy()))
                     .filter(ccyAmt -> ccyAmt.getAmt() != null)
                     .collect(Collectors.toMap(
                             CcyAmt::getCcy,

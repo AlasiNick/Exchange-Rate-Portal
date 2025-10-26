@@ -18,7 +18,10 @@ import {
   LucideIconData,
   LayoutDashboard,
   Bell,
-  // Add more icons as needed
+  Info,
+  CircleCheck,
+  TriangleAlert,
+  CircleX
 } from 'lucide-angular';
 
 export const ZARD_ICONS = {
@@ -31,6 +34,10 @@ export const ZARD_ICONS = {
   calendar: Calendar,
   check: Check,
   bell: Bell,
+  info: Info,
+  'circle-x': CircleX,
+  'circle-check': CircleCheck,
+  'triangle-alert': TriangleAlert,
   'chevron-down': ChevronDown,
   'chevron-up': ChevronUp,
   'chevron-left': ChevronLeft,
@@ -39,7 +46,6 @@ export const ZARD_ICONS = {
   ellipsis: Ellipsis,
   'layout-dashboard': LayoutDashboard,
   'chevrons-up-down': ChevronsUpDown,
-  // Add more mappings as you need them
 } as const;
 
 export type ZardIcon = keyof typeof ZARD_ICONS | LucideIconData;

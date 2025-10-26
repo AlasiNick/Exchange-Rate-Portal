@@ -1,1 +1,107 @@
-BEBEBBE
+<h1>Historical Data for currency</h1>
+
+@if (showError()) {
+  <z-alert
+    [zTitle]="'Error'"
+    [zDescription]="'Please select a currency first.'"
+    zType="error"
+    zAppearance="outline"
+    class="mb-4"
+  />
+}
+
+<div class="max-w-4xl mx-auto p-6 border rounded-md flex flex-col gap-6">
+  <z-combobox
+    [options]="currenciesForList"
+    class="w-[250px] mx-auto"
+    [placeholder]="'Select currency'"
+    [searchPlaceholder]="'Search currency...'"
+    [emptyText]="'No currency found.'"
+    (zOnSelect)="onSelect($event)"
+  />
+
+  <button z-button zType="outline" class="w-[250px] mx-auto" (click)="showData()">Select</button>
+
+  @if (loaderIsActive()) {
+    <z-loader class="mx-auto" />
+  }
+
+  @if (historicalData() && !loaderIsActive()) {
+    <div class="w-full">
+      <div class="overflow-hidden rounded-md border">
+        <table z-table>
+          <caption class="text-lg font-semibold mb-4">
+            Historical Data for {{ currency() }} 
+            <span class="text-sm font-normal text-gray-500 ml-2">
+              (Total: {{ historicalData()?.length }} records)
+            </span>
+          </caption>
+          <thead z-table-header>
+            <tr z-table-row>
+              <th z-table-head (click)="sortBy('rateToEur')" class="cursor-pointer hover:bg-gray-50">
+                <div class="flex items-center gap-1">
+                  <span>Rate to EUR</span>
+                @if (sortColumn() === 'rateToEur') {
+                  @if (sortDirection() === 'asc') {
+                    <z-icon zType="chevron-up" class="w-4 h-4" />
+                  } @else {
+                    <z-icon zType="chevron-down" class="w-4 h-4" />
+                  }
+                } @else {
+                  <z-icon zType="chevrons-up-down" class="w-4 h-4" />
+                }
+              </div>
+            </th>
+            <th z-table-head (click)="sortBy('rateDate')" class="cursor-pointer hover:bg-gray-50">
+              <div class="flex items-center gap-1">
+                <span>Rate Date</span>
+                @if (sortColumn() === 'rateDate') {
+                  @if (sortDirection() === 'asc') {
+                    <z-icon zType="chevron-up" class="w-4 h-4" />
+                  } @else {
+                    <z-icon zType="chevron-down" class="w-4 h-4" />
+                  }
+                } @else {
+                  <z-icon zType="chevrons-up-down" class="w-4 h-4" />
+                }
+              </div>
+            </th>
+          </tr>
+        </thead>
+          <tbody>
+            @for (data of paginatedData(); track data) {
+              <tr z-table-row>
+                <td z-table-cell>{{ data?.rateToEur }}</td>
+                <td z-table-cell>{{ formatDate(data?.rateDate) }}</td>
+              </tr>
+            }
+            @if (paginatedData().length === 0) {
+              <tr z-table-row>
+                <td z-table-cell colspan="2" class="text-center text-gray-500 py-4">
+                  No historical data found for {{ currency() }}
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      @if (historicalData() && historicalData()!.length > pageSize) {
+        <div class="mt-4 flex justify-center">
+          <z-pagination
+            [zPageIndex]="currentPage()"
+            [zTotal]="totalPages"
+            (zPageIndexChange)="onPageChange($event)"
+          />
+        </div>
+      }
+
+      @if (historicalData() && historicalData()!.length > 0) {
+        <div class="text-center text-sm text-gray-500 mt-2">
+          Showing {{ paginatedData().length }} of {{ historicalData()!.length }} records
+          (Page {{ currentPage() }} of {{ totalPages }})
+        </div>
+      }
+    </div>
+  }
+</div>

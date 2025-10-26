@@ -9,8 +9,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 @Service
 @RequiredArgsConstructor
@@ -49,7 +54,6 @@ public class FxRateService {
 
             List<Rate> newRates = fxRates.getRates().stream()
                     .flatMap(rate -> rate.getCcyAmt().stream())
-                    .filter(ccyAmt -> !"EUR".equalsIgnoreCase(ccyAmt.getCcy()))
                     .filter(ccyAmt -> ccyAmt.getAmt() != null)
                     .map(ccyAmt -> {
                         Rate rate = new Rate();
@@ -58,6 +62,7 @@ public class FxRateService {
                         rate.setRateDate(date);
                         return rate;
                     })
+                    .filter(distinctByKey(rate -> rate.getCurrencyCode() + "_" + rate.getRateDate()))
                     .filter(rate -> fxRateRepository.findByCurrencyCodeAndRateDate(rate.getCurrencyCode(), date).isEmpty())
                     .toList();
 
@@ -76,5 +81,10 @@ public class FxRateService {
             refreshRatesForDate(date);
         }
         log.info("Backfilled rates for last {} days", days);
+    }
+
+    private static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+        Set<Object> seen = ConcurrentHashMap.newKeySet();
+        return t -> seen.add(keyExtractor.apply(t));
     }
 }
