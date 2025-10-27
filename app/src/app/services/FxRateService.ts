@@ -16,8 +16,8 @@ export class FxRateService {
   convertCurrency(amount: number, from: string, to: string, date?: string) {
     let params = new HttpParams()
       .set('amount', amount.toString())
-      .set('from', from)
-      .set('to', to);
+      .set('currencyFrom', from)
+      .set('currencyTo', to);
     if (date) params = params.set('date', date);
 
     return this.http.get(`${this.baseUrl}/convert`, { params });

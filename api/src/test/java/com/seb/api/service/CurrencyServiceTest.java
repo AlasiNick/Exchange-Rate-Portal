@@ -108,7 +108,7 @@ class CurrencyServiceTest {
         when(externalApiService.fetchCurrencyTable()).thenReturn(currencyTable);
         when(externalApiService.fetchCurrentRates("EU")).thenReturn(fxRates);
         currencyService.refreshCurrencies();
-        
+
         var inOrder = inOrder(currencyRepository);
         inOrder.verify(currencyRepository).deleteAllInBatch();
         inOrder.verify(currencyRepository).saveAll(anyList());

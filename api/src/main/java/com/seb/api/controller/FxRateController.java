@@ -31,7 +31,7 @@ public class FxRateController {
             @RequestParam String currencyTo,
             @RequestParam(required = false) LocalDate date
     ) {
-        if (date == null) {
+        if (date == null || date.equals(LocalDate.now())) {
             return currencyConversionService.convertWithLatestRate(amount, currencyFrom, currencyTo);
         } else {
             return currencyConversionService.convertWithHistoricalRate(amount, currencyFrom, currencyTo, date);
